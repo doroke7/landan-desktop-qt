@@ -141,6 +141,11 @@ void MainWindow::startCameraWithPermission()
     case Qt::PermissionStatus::Granted:
         break;
     }
+    m_permitted = true;
+    // The camera is created only after permission is granted; otherwise the AVFoundation
+    // backend refuses access and the preview stays black.
+    if (!m_camera && m_deviceCombo->count() > 0)
+        onDeviceChanged();
     if (m_camera)
         m_camera->start();
 }
@@ -173,7 +178,7 @@ void MainWindow::refreshDevices()
     block.unblock();
 
     // Only rebuild the camera if the selected device actually changed.
-    if (!m_camera || m_camera->cameraDevice() != devices[select]) {
+    if (m_permitted && (!m_camera || m_camera->cameraDevice() != devices[select])) {
         onDeviceChanged();
     }
 }

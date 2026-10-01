@@ -20,3 +20,11 @@ set_target_properties(UsbCam PROPERTIES
     MACOSX_BUNDLE_INFO_PLIST ${CMAKE_SOURCE_DIR}/Info.plist.in
     WIN32_EXECUTABLE ON
 )
+
+# macOS: re-sign the bundle so Info.plist is bound to the signature; otherwise TCC
+# never shows the camera permission prompt and the preview stays blank.
+if(APPLE)
+    add_custom_command(TARGET UsbCam POST_BUILD
+        COMMAND codesign --force --deep --sign - $<TARGET_BUNDLE_DIR:UsbCam>
+        COMMENT "Ad-hoc signing UsbCam.app")
+endif()

@@ -56,6 +56,7 @@ private:
 
     QMediaDevices m_mediaDevices;
     QMediaCaptureSession *m_session = nullptr;
+    bool m_permitted = false;
     QCamera *m_camera = nullptr;
     QImageCapture *m_imageCapture = nullptr;
     QMediaRecorder *m_recorder = nullptr;
